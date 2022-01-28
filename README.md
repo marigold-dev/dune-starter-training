@@ -93,7 +93,7 @@ By using these locked opam files, it is then possible to recover the precise bui
 
 - `dune-project` describes the project and its dependencies
 - `opam switch` creates a sandboxed environment for our project: we can work in an isolated environment
-- `opam lock` creates a locked resolution of opam dependencies: we are sure our teammate are using the same version of the dependencies
+- `opam lock` creates a locked resolution of opam dependencies: we are sure our teammates are using the same version of the dependencies
 - By having a `<package>.opam` in our directory, we have define a **[scope](https://dune.readthedocs.io/en/stable/concepts.html#scopes-1)**. Typically, any given project will define a single scope.
 
 ## Create a first executable
