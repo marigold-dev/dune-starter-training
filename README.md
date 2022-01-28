@@ -375,6 +375,21 @@ or a irmin repository
 
 **In both case the module implementation file must be named `repository.ml`**
 
+This may result of this folders organisation:
+```
+|
+...
+|- repository
+|-- dune
+|-- repository.mli
+|- memory-repository
+|-- dune
+|-- repository.ml
+|- irmin-repository
+|-- dune
+|__ repository.ml
+```
+
 Later an executable may select an actual implementation.
 ```lisp
 (executable
