@@ -244,7 +244,11 @@ module Room : sig
   type t [@@deriving show]
 
   val make : string -> t option
-end = struct
+end
+```
+
+``` ocaml
+module Room = struct
   type t =
     | Stable
     | Stall
