@@ -77,6 +77,7 @@ Edit `dune-project`:
   (ocamlformat (>= 0.20))
   (ocamlformat-rpc (>= 0.20))
   (ocaml-lsp-server (>= 1.9.1))
+  dream
   (lwt (>= 5.5.0))))
 ```
 
@@ -117,11 +118,11 @@ let greeting request =
 let () = greeting |> Dream.run  ~port:3000
  ```
 
-4. Compile your exe with `dune build -p caravanserai`
+4. Compile your exe with `dune build bin/caravanserai.exe`
 
 This will create `_build/default/bin/caravanserai.exe`
 
-5. Run `./_build/default/bin/caravanserai.exe` and access caravaner http://localhost:8080/?name=epic%20caravaner
+5. Run `dune exec bin/caravanserai.exe` and access caravaner http://localhost:8080/?name=epic%20caravaner
 
 ### Format and autopromote
 
