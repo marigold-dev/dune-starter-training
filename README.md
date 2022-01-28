@@ -287,7 +287,7 @@ opam install  . --deps-only --with-test
 Here we introduced [tests](https://dune.readthedocs.io/en/stable/dune-files.html#tests) stanza. It ease the definition of test executables.
 This will define an executable named test_domain.exe that will be executed as part of the [runtest]() alias
 
-4. We can now add some test case:
+4. We can now add some test case in `lib/test/test_domain.ml`:
 ```ocaml
 open Caravanserai.Domain
 open Alcotest
