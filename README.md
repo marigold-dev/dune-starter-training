@@ -46,7 +46,7 @@ It contains the version of Dune we will use and the name of the project.
 
 Now we have a `dune-project` we can use it to generate our `caravanserai.opam` and describe our dependencies. We would like to add `dune` as build dependency, `ocamlformat`, `ocamlformat-rpc`, `ocaml-lsp-server` as developement dependencies, `alcotest` for testing, and `dream` as a project dependency
 
-Since there is no notion of development dependencies with opam, we will produce 2 packages, one for dev purpose and one for development purpose.
+Since there is no notion of development dependencies with opam, we will produce 2 packages, one for production purpose and one for development purpose.
 
 > You may prefer to have a Makefile to manage dev dependencies install, that's ok and that's how Tezos manage them. I prefer to have only one manifest to manage all my dependecies. A better option is to use esy.sh but we will not introduce esy in this first training.
 
@@ -81,7 +81,7 @@ Edit `dune-project`:
   (lwt (>= 5.5.0))))
 ```
 
-We can then run `dune build` to generate the opam manifests, install our dependencies and then genrate lockfiles:
+We can then run `dune build` to generate the opam manifest, install our dependencies and then generate lockfiles:
 ```sh
 dune build
 opam install . --deps-only
