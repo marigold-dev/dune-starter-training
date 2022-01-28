@@ -24,7 +24,7 @@ So create the dune-project file with the [lang](https://dune.readthedocs.io/en/l
 echo '(lang dune 2.9)\n (name caravanserai)' >> dune-project
 ```
 
-You notice that `dune-project` is a manifest that use s-expression format.
+You notice that `dune-project` is a manifest that use a kind of s-expression format.
 It contains the version of Dune we will use and the name of the project.
 
 > You may not be familiar with s-expression. It's just anothe data text format like json, yaml, xml or toml.
