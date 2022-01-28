@@ -77,7 +77,7 @@ Edit `dune-project`:
   (ocamlformat (>= 0.20))
   (ocamlformat-rpc (>= 0.20))
   (ocaml-lsp-server (>= 1.9.1))
-  (dream (>= 1.0.0)
+  dream
   (lwt (>= 5.5.0))))
 ```
 
