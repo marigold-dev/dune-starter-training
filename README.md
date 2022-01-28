@@ -144,6 +144,8 @@ This runs an autoformatter over the files when it builds the files: for OCaml th
 
 > `dune build @fmt --auto-promote` is a must-have command for a pre-commit hook!
 
+If you are checking that the code is properly formatted, simply do not promote the result, using `dune build @fmt`. 
+
 ## Create a first library
 
 1. Create a `lib` directory
@@ -196,15 +198,19 @@ So remove the flags overide in the file dune file at the root.
 The [env](https://dune.readthedocs.io/en/stable/dune-files.html#env) stanza can be used to define environment variable. Define an environment variable `port` with a value `8000` for dev env and use it to start our web server.
 
 
-5. Fix the warnings by editing `domain.ml`
+5. Fix the warnings by editing `domain.ml` and adding `domain.mli`
 
-```ocaml
+``` ocaml
 module Room : sig
   type t
 
   val show : t -> string
   val make : string -> t option
-end = struct
+end
+```
+
+```ocaml
+module Room = struct
   type t =
     | Stable
     | Stall
@@ -245,7 +251,11 @@ module Room : sig
   type t [@@deriving show]
 
   val make : string -> t option
-end = struct
+end
+```
+
+``` ocaml
+module Room = struct
   type t =
     | Stable
     | Stall
@@ -284,7 +294,7 @@ opam install  . --deps-only --with-test
 Here we introduced [tests](https://dune.readthedocs.io/en/stable/dune-files.html#tests) stanza. It ease the definition of test executables.
 This will define an executable named test_domain.exe that will be executed as part of the [runtest]() alias
 
-4. We can now add some test case:
+4. We can now add some test case in `lib/test/test_domain.ml`:
 ```ocaml
 open Caravanserai.Domain
 open Alcotest
