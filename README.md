@@ -52,11 +52,15 @@ Since there is no notion of development dependencies with opam, we will produce 
 
 Edit `dune-project`:
 ```lisp
-(lang dune 2.9)
- (name caravanserai)
- (version 0.0.1)
+((lang dune 2.9)
 
- (generate_opam_files true)
+(name caravanserai)
+
+(version 0.1)
+
+(maintainers "contact@marigold.dev")
+
+(generate_opam_files true)
 
 (package
  (name caravanserai)
@@ -64,19 +68,24 @@ Edit `dune-project`:
  (description "Toy journey to explore Dune")
  (depends
   (alcotest :with-test)
-  (dune (and :build (>= 2.9)))
-  (dream (= 1.0.0~alpha2))))
+  (dune
+   (and
+    :build
+    (>= 2.9)))
+  (dream
+   (= 1.0.0~alpha2))))
 
- (package
+(package
  (name caravanserai-dev)
- (synopsis "Toy journey to explore Dune")
+ (synopsis "A package to install dev dependencies")
  (description "THIS PACKAGE IS FOR DEVELOPMENT PURPOSE")
  (depends
-  (alcotest :with-test)
-  (dune (and :build (>= 2.9)))
-  (ocamlformat (>= 0.20))
-  (ocamlformat-rpc (>= 0.20))
-  (ocaml-lsp-server (>= 1.9.1))))
+  (ocamlformat
+   (>= 0.20))
+  (ocamlformat-rpc
+   (>= 0.20))
+  (ocaml-lsp-server
+   (>= 1.9.1))))
 ```
 
 We can then run `dune build` to generate the opam manifest, install our dependencies and then generate lockfiles:
