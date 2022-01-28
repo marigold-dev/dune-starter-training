@@ -122,7 +122,7 @@ let () = greeting |> Dream.run  ~port:3000
 
 This will create `_build/default/bin/caravanserai.exe`
 
-5. Run `dune exec bin/caravanserai.exe` and access caravaner http://localhost:8080/?name=epic%20caravaner
+5. Run `dune exec bin/caravanserai.exe` and access caravaner http://localhost:3000/?name=epic%20caravaner
 
 ### Format and autopromote
 
