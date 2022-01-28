@@ -65,7 +65,7 @@ Edit `dune-project`:
  (depends
   (alcotest :with-test)
   (dune (and :build (>= 2.9)))
-  (lwt (>= 5.5.0))))
+  (dream (= 1.0.0~alpha2))))
 
  (package
  (name caravanserai-dev)
@@ -76,9 +76,7 @@ Edit `dune-project`:
   (dune (and :build (>= 2.9)))
   (ocamlformat (>= 0.20))
   (ocamlformat-rpc (>= 0.20))
-  (ocaml-lsp-server (>= 1.9.1))
-  dream
-  (lwt (>= 5.5.0))))
+  (ocaml-lsp-server (>= 1.9.1))))
 ```
 
 We can then run `dune build` to generate the opam manifest, install our dependencies and then generate lockfiles:
