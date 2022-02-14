@@ -2,12 +2,12 @@ This training aims to learn how to setup a new OCaml project using Dune build sy
 
 ## Setup a new project
 
-
 ### Create your sandbox
 
-**Prerequisite**: [install opam](https://opam.ocaml.org/doc/Install.html)
+**Prerequisite**: [install opam](https://opam.ocaml.org/doc/Install.html) : _don't forget to run `opam init` if you install opam for the first time_
 
 Then we can create a sandbox using opam and install dune:
+
 ```sh
 opam switch create . ocaml-base-compiler.4.13.1
 eval $(opam env)
@@ -32,15 +32,15 @@ It contains the version of Dune we will use and the name of the project.
 >
 > ```lisp
 > (lang dune 2.9)
-> (name caravanserai)
+>  (name caravanserai)
 > ```
 >
 > can be read as this equivalent json
 >
 > ```json
 > {
->  "lang" : {"dune" :  "2.9"},
->  "name" : "caravanserai"
+>   "lang": { "dune": "2.9" },
+>   "name": "caravanserai"
 > }
 > ```
 
@@ -51,8 +51,9 @@ Since there is no notion of development dependencies with opam, we will produce 
 > You may prefer to have a Makefile to manage dev dependencies install, that's ok and that's how Tezos manage them. I prefer to have only one manifest to manage all my dependecies. A better option is to use esy.sh but we will not introduce esy in this first training.
 
 Edit `dune-project`:
+
 ```lisp
-((lang dune 2.9)
+(lang dune 2.9)
 
 (name caravanserai)
 
@@ -89,6 +90,7 @@ Edit `dune-project`:
 ```
 
 We can then run `dune build` to generate the opam manifest, install our dependencies and then generate lockfiles:
+
 ```sh
 dune build
 opam install . --deps-only
@@ -107,13 +109,16 @@ By using these locked opam files, it is then possible to recover the precise bui
 ## Create a first executable
 
 1. Create a `bin` directory
-2. Create a `dune` file inside that add dream as a dependency and define an executable
+2. Create a `dune` file inside that add `dream` as a dependency and define an executable
+
 ```lisp
 (executable
  (name caravanserai)
  (libraries dream))
- ````
+```
+
 3. Create a `caravanserai.ml` file
+
 ```ocaml
 let greeting request =
   match Dream.query "name" request with
@@ -123,7 +128,12 @@ let greeting request =
       |> Dream.html_escape |> Dream.html
 
 let () = greeting |> Dream.run  ~port:3000
- ```
+```
+
+```sh
+# install Dream
+opam install . --deps-only
+```
 
 4. Compile your exe with `dune build bin/caravanserai.exe`
 
@@ -133,33 +143,36 @@ This will create `_build/default/bin/caravanserai.exe`
 
 ### Format and autopromote
 
-We have installed ocamlformat but still not runned it (unless you are using format on save in your IDE)
+We have installed ocamlformat but still not run it (unless you are using format on save in your IDE)
 
-We can run 
+We can run
+
 ```sh
 dune build @fmt --auto-promote
-````
+```
 
 This runs an autoformatter over the files when it builds the files: for OCaml this is OCamlformat. Then it updates the source files with the content of the formatted build files. This is the concept of [promotion](https://dune.readthedocs.io/en/latest/concepts.html?highlight=promotion#promotion)
 
-> `dune build @fmt --auto-promote` is a must-have command for a pre-commit hook!
+> `dune build @fmt --auto-promote` is a must-have command for a [pre-commit hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)!
 
-If you are checking that the code is properly formatted, simply do not promote the result, using `dune build @fmt`. 
+If you are checking that the code is properly formatted, simply do not promote the result, using `dune build @fmt`.
 
 ## Create a first library
 
 1. Create a `lib` directory
 2. Create a `dune` file inside to describe a library
+
 ```lisp
 (library
  (name caravanserai)
  (public_name caravanserai.lib))
- ```
+```
 
 - `name` stanza is the name for the root module of the library. Here `Caravanserai`. This will expose the module from a file `caravanserai.ml` if there is one, or create a virtual module with all the modules in the directory as submodules.
 - `public_name` is the name for the library, this is the name you will use to link this library to another library or executable
 
 3. Create a `domain.ml` file inside, this file will contains the modelization of the business domain of our caravanserail in a [DDD styled functional architecture](https://pragprog.com/titles/swdddf/domain-modeling-made-functional/)
+
 ```ocaml
 module Room : sig
   type t
@@ -176,6 +189,7 @@ end
 Dune have a notion of environments. You have `dev` environment which is the default when you do `dune build` and `release` which is used when you do `dune build --release`. You can also defined your owns and call them with `--profile`. `dune build --profile=foo` will look for a `foo` environment.
 
 To define or overide environments you may create `dune` file at the root of the project, along with `dune-project` file:
+
 ```lisp
 (env
  (dev
@@ -197,17 +211,7 @@ So remove the flags overide in the file dune file at the root.
 
 The [env](https://dune.readthedocs.io/en/stable/dune-files.html#env) stanza can be used to define environment variable. Define an environment variable `port` with a value `8000` for dev env and use it to start our web server.
 
-
-5. Fix the warnings by editing `domain.ml` and adding `domain.mli`
-
-``` ocaml
-module Room : sig
-  type t
-
-  val show : t -> string
-  val make : string -> t option
-end
-```
+5. Fix the warnings by editing `domain.ml` to:
 
 ```ocaml
 module Room = struct
@@ -230,7 +234,18 @@ module Room = struct
 end
 ```
 
-You can know build your library
+and creating file `domain.mli`:
+
+```ocaml
+module Room : sig
+  type t
+
+  val show : t -> string
+  val make : string -> t option
+end
+```
+
+You can know build your library!
 
 ### Exercice 2
 
@@ -241,11 +256,12 @@ You can know build your library
 
 We could avoid to write our own `show` function by using [ppx_deriving](https://github.com/ocaml-ppx/ppx_deriving). Let's do it!
 
-1. Add `ppx_deriving` as a project dependency. 
+1. Add `ppx_deriving` as a project dependency.
 
 > Don't forget to generate the caravanserai.opam and run opam install
 
 2. Use the ppx to derive the `show` function
+
 ```ocaml
 module Room : sig
   type t [@@deriving show]
@@ -254,7 +270,7 @@ module Room : sig
 end
 ```
 
-``` ocaml
+```ocaml
 module Room = struct
   type t =
     | Stable
@@ -274,17 +290,18 @@ end
 
 > The ppx rewritter to use is `ppx_deriving.show`
 
-
 ## Add tests
 
 1. Install test dependencies
+
 ```sh
 opam install  . --deps-only --with-test
 ```
 
 2. Create a `lib/test` directory with a `test_domain.ml` file which contains tests for our `lib/domain.ml`
-  
+
 3. Create a `dune` file:
+
 ```lisp
 (tests
  (names test_domain)
@@ -292,9 +309,10 @@ opam install  . --deps-only --with-test
 ```
 
 Here we introduced [tests](https://dune.readthedocs.io/en/stable/dune-files.html#tests) stanza. It ease the definition of test executables.
-This will define an executable named test_domain.exe that will be executed as part of the [runtest]() alias
+This will define an executable named test_domain.exe that will be executed as part of the [runtest](https://dune.readthedocs.io/en/stable/dune-files.html#alias) alias
 
 4. We can now add some test case in `lib/test/test_domain.ml`:
+
 ```ocaml
 open Caravanserai.Domain
 open Alcotest
@@ -324,6 +342,7 @@ Sometime it is usefull to define a module interface and use it while we cannot i
 ### Modules without implementation
 
 1. create a `lib/service.mli` file:
+
 ```ocaml
 module Room : sig
   val create : string -> Domain.Room.t
@@ -331,7 +350,9 @@ module Room : sig
   val delete : Domain.Room.t -> unit
 end
 ```
+
 2. declare service as a module without implementation
+
 ```lisp
 (library
  (name caravanserai)
@@ -341,13 +362,14 @@ end
   (pps ppx_deriving.show)))
 ```
 
-Such modules are not officially supported by the OCaml compiler, however they are commonly used. 
+Such modules are not officially supported by the OCaml compiler, however they are commonly used.
 
 ### Virtual librairies
 
 Virtual libraries correspond to dune’s ability to compile parameterized libraries and delay the selection of concrete implementations until linking an executable.
 
 As a exemple we may define a `repository` virtual library:
+
 ```lisp
 (library
  (name repository)
@@ -355,27 +377,30 @@ As a exemple we may define a `repository` virtual library:
  (virtual_modules repository))
 ```
 
-
 This virtual library may be linked to any library as a regular library.
 
 Later you may define a in memory repository:
+
 ```lisp
 (library
  (name memory_repository)
  ;; repository.ml must be present, but repository.mli must not be
  (implements repository))
- ```
+```
+
 or a irmin repository
+
 ```lisp
 (library
  (name irmin_repository)
  ;; repository.ml must be present, but repository.mli must not be
  (implements repository))
- ```
+```
 
 **In both case the module implementation file must be named `repository.ml`**
 
 This may result of this folders organisation:
+
 ```
 |
 ...
@@ -391,11 +416,12 @@ This may result of this folders organisation:
 ```
 
 Later an executable may select an actual implementation.
+
 ```lisp
 (executable
  (name caravanserai)
  (libraries dream caravanserai.lib memory_repository))
-  ```
+```
 
 ## Take Away
 
