@@ -84,9 +84,9 @@ Edit `dune-project`:
   (ocamlformat
    (>= 0.20))
   (ocamlformat-rpc
-   (>= 0.20))
+   (>= 0.19))
   (ocaml-lsp-server
-   (>= 1.9.1))))
+   (>= 1.10.3))))
 ```
 
 We can then run `dune build` to generate the opam manifest, install our dependencies and then generate lockfiles:
